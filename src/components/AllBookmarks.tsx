@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import Category from '../types/category';
 import Bookmark from '../types/Bookmark';
@@ -14,10 +14,14 @@ const AllBookmarks = () => {
   const categorizedBookmarks = useSelector(
     (state: RootState) => state.categorizedBookmarks
   );
+
+  const fetched = useRef<boolean>(false);
+
   const dispatch = useDispatch();
 
   const fetchBookmarks = async () => {
     try {
+      fetched.current = true;
       const response = await axios.get('http://localhost:3001/bookmarks');
       const bookmarksData = response.data;
       dispatch(addBookmarks(bookmarksData));
@@ -45,7 +49,7 @@ const AllBookmarks = () => {
   };
 
   useEffect(() => {
-    fetchBookmarks();
+    if (!fetched.current) fetchBookmarks();
   }, []);
 
   return (
