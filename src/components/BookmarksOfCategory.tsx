@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Bookmark from '../types/Bookmark';
 import CategorizedBookmark from '../types/CategorizedBookmark';
 
@@ -12,9 +13,12 @@ const BookmarksOfCategory = ({ name, bookmarks }: CategorizedBookmark) => {
             key={idx}
           >
             <div>{bookmark.title}</div>
-            <button className='bg-pink-500 p-2 text-white rounded-md'>
+            <Link
+              to={`/bookmarks/${bookmark.id}`}
+              className='bg-pink-500 p-2 text-white rounded-md'
+            >
               Details
-            </button>
+            </Link>
           </div>
         ))}
       </div>

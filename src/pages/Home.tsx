@@ -1,6 +1,5 @@
 import AddBookmark from '../components/AddBookmark';
 import AllBookmarks from '../components/AllBookmarks';
-import BookmarkDetails from '../components/BookmarkDetails';
 
 const Home = () => {
   return (
@@ -10,7 +9,6 @@ const Home = () => {
       </div>
       <div className='col-span-4'>
         <AddBookmark />
-        <BookmarkDetails />
       </div>
     </div>
   );
