@@ -1,7 +1,8 @@
 import 'typeface-poppins';
+import Home from './pages/Home';
 
 function App() {
-  return <div className='w-screen h-screen bg-red-400'>Hello World</div>;
+  return <Home />;
 }
 
 export default App;

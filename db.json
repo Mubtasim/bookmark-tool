@@ -1,0 +1,26 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "A"
+    },
+    {
+      "id": 2,
+      "name": "B"
+    }
+  ],
+  "bookmarks": [
+    {
+      "id": 1,
+      "title": "Facebook",
+      "url": "facebook.com",
+      "categoryId": 1
+    },
+    {
+      "id": 2,
+      "title": "Github",
+      "url": "github.com",
+      "categoryId": 2
+    }
+  ]
+}
