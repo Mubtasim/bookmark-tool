@@ -130,9 +130,15 @@ const AddBookmark = () => {
             )}
             <button
               onClick={saveBookmark}
-              className='bg-blue-800 text-white px-4 py-2 rounded-sm'
+              className='bg-blue-800 text-white px-4 py-2 rounded-sm mr-2'
             >
               Add Bookmark
+            </button>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className='bg-yellow-800 text-white px-4 py-2 rounded-sm'
+            >
+              Close
             </button>
           </div>
         </div>

@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Bookmark from '../types/Bookmark';
+import Category from '../types/category';
 
 const BookmarkDetails = () => {
   const [bookmark, setBookmark] = useState<Bookmark | null>(null);
+  const [category, setCategory] = useState<Category | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -15,6 +17,11 @@ const BookmarkDetails = () => {
           `http://localhost:3001/bookmarks/${id}`
         );
         setBookmark(response.data);
+        const categoryId = response.data.categoryId;
+        const categoryResponse = await axios.get(
+          `http://localhost:3001/categories/${categoryId}`
+        );
+        setCategory(categoryResponse.data);
       } catch (error) {
         console.error(error);
       }
@@ -30,11 +37,14 @@ const BookmarkDetails = () => {
           <span className='font-semibold inline'>Title:</span> {bookmark?.title}
         </div>
         <div className='mb-5'>
-          <span className='font-semibold inline'>URL:</span> {bookmark?.url}
+          <span className='font-semibold inline'>URL:</span>{' '}
+          <a href={bookmark?.url} className='text-blue-800'>
+            {bookmark?.url}
+          </a>
         </div>
         <div>
           <span className='font-semibold inline'>Category:</span>{' '}
-          {bookmark?.categoryId}
+          {category?.name}
         </div>
       </div>
       <button onClick={() => navigate(-1)} className='bg-white rounded-sm p-2'>
