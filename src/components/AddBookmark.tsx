@@ -5,6 +5,7 @@ import { RootState } from '../store';
 import { addCategory } from '../features/categories/categoriesSlice';
 import { addBookmark } from '../features/bookmarks/bookmarksSlice';
 import { addCategorizedBookmark } from '../features/categorizedBookmarks/categorizedBookmarksSlice';
+import GoogleLoginButton from './GoogleLoginButton';
 
 const AddBookmark = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -70,11 +71,12 @@ const AddBookmark = () => {
   return (
     <div className='flex flex-col items-end'>
       <button
-        className='bg-blue-800 text-white p-2 rounded-sm w-1/3 text-sm'
+        className='bg-blue-800 text-white p-2 rounded-sm w-1/3 text-sm mb-3'
         onClick={handleModalOpen}
       >
         Create Bookmark
       </button>
+      <GoogleLoginButton />
       {isModalOpen && (
         <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50'>
           <div className='bg-white p-4 rounded shadow'>
