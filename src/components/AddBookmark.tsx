@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import axios from 'axios';
-import Category from '../types/category';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { addCategory } from '../features/categories/categoriesSlice';
+import { addBookmark } from '../features/bookmarks/bookmarksSlice';
+import { addCategorizedBookmark } from '../features/categorizedBookmarks/categorizedBookmarksSlice';
 
 const AddBookmark = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [url, setUrl] = useState<string>('');
   const [category, setCategory] = useState<string>('');
-  const [categories, setCategories] = useState<Category[]>([]);
+  const categories = useSelector((state: RootState) => state.categories);
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [newCategory, setNewCategory] = useState('');
+
+  const dispatch = useDispatch();
 
   const toggleNewCategoryInput = () => {
     setShowNewCategoryInput(!showNewCategoryInput);
@@ -20,7 +26,8 @@ const AddBookmark = () => {
       const response = await axios.post('http://localhost:3001/categories', {
         name: newCategory,
       });
-      setCategories([...categories, response.data]);
+      // setCategories([...categories, response.data]);
+      dispatch(addCategory(response.data));
       setCategory(response.data.id.toString());
       setNewCategory('');
       setShowNewCategoryInput(false);
@@ -29,17 +36,6 @@ const AddBookmark = () => {
     }
   };
 
-  // Fetch categories from JSON server
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/categories');
-      setCategories(response.data);
-    } catch (error) {
-      console.log('Error fetching categories:', error);
-    }
-  };
-
-  // Save the bookmark to the JSON server
   const saveBookmark = async () => {
     try {
       if (!(title && url && category)) {
@@ -51,8 +47,12 @@ const AddBookmark = () => {
         url,
         categoryId: parseInt(category),
       };
-      await axios.post('http://localhost:3001/bookmarks', newBookmark);
-      // Reset form values and close modal
+      const newBookmarkResponse = await axios.post(
+        'http://localhost:3001/bookmarks',
+        newBookmark
+      );
+      dispatch(addBookmark(newBookmark));
+      dispatch(addCategorizedBookmark(newBookmarkResponse.data));
       setTitle('');
       setUrl('');
       setCategory('');
@@ -64,7 +64,7 @@ const AddBookmark = () => {
 
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
-    fetchCategories(); // Fetch categories when the modal opens
+    // fetchCategories(); // Fetch categories when the modal opens
   };
 
   return (

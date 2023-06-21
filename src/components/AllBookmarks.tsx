@@ -1,40 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import Category from '../types/category';
 import Bookmark from '../types/Bookmark';
 import BookmarksOfCategory from './BookmarksOfCategory';
 import CategorizedBookmark from '../types/CategorizedBookmark';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { addBookmarks } from '../features/bookmarks/bookmarksSlice';
+import { addCategories } from '../features/categories/categoriesSlice';
+import { addCategorizedBookmarks } from '../features/categorizedBookmarks/categorizedBookmarksSlice';
 
 const AllBookmarks = () => {
-  const [categorizedBookmarks, setCategorizedBookmarks] = useState<
-    CategorizedBookmark[] | null
-  >(null);
+  const categorizedBookmarks = useSelector(
+    (state: RootState) => state.categorizedBookmarks
+  );
+  const dispatch = useDispatch();
 
   const fetchBookmarks = async () => {
     try {
       const response = await axios.get('http://localhost:3001/bookmarks');
       const bookmarksData = response.data;
+      dispatch(addBookmarks(bookmarksData));
 
       const responseCategories = await axios.get(
         'http://localhost:3001/categories'
       );
       const categoriesData = responseCategories.data;
+      dispatch(addCategories(categoriesData));
 
       const categorizedBookmarks = categoriesData.map((category: Category) => {
         const bookmarksInCategory = bookmarksData.filter(
           (bookmark: Bookmark) => bookmark.categoryId === category.id
         );
-        console.log('bookmarks in category', bookmarksInCategory);
         return {
           ...category,
           bookmarks: bookmarksInCategory,
         };
       });
 
-      setCategorizedBookmarks(categorizedBookmarks);
-      console.log('categorized Bookmarks', categorizedBookmarks);
-      // console.log('bookmark data', bookmarksData);
-      // console.log('category data', categoriesData);
+      dispatch(addCategorizedBookmarks(categorizedBookmarks));
     } catch (error) {
       console.log('Error fetch bookmarks', error);
     }

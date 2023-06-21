@@ -10,9 +10,12 @@ const bookmarksSlice = createSlice({
     addBookmark: (state, action) => {
       state.push(action.payload);
     },
+    addBookmarks: (state, action) => {
+      return [...state, ...action.payload];
+    },
   },
 });
 
-export const { addBookmark } = bookmarksSlice.actions;
+export const { addBookmark, addBookmarks } = bookmarksSlice.actions;
 
 export default bookmarksSlice.reducer;
