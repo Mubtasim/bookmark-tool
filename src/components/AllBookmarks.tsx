@@ -11,29 +11,33 @@ const AllBookmarks = () => {
   >(null);
 
   const fetchBookmarks = async () => {
-    const response = await axios.get('http://localhost:3001/bookmarks');
-    const bookmarksData = response.data;
+    try {
+      const response = await axios.get('http://localhost:3001/bookmarks');
+      const bookmarksData = response.data;
 
-    const responseCategories = await axios.get(
-      'http://localhost:3001/categories'
-    );
-    const categoriesData = responseCategories.data;
-
-    const categorizedBookmarks = categoriesData.map((category: Category) => {
-      const bookmarksInCategory = bookmarksData.filter(
-        (bookmark: Bookmark) => bookmark.categoryId === category.id
+      const responseCategories = await axios.get(
+        'http://localhost:3001/categories'
       );
-      console.log('bookmarks in category', bookmarksInCategory);
-      return {
-        ...category,
-        bookmarks: bookmarksInCategory,
-      };
-    });
+      const categoriesData = responseCategories.data;
 
-    setCategorizedBookmarks(categorizedBookmarks);
-    console.log('categorized Bookmarks', categorizedBookmarks);
-    // console.log('bookmark data', bookmarksData);
-    // console.log('category data', categoriesData);
+      const categorizedBookmarks = categoriesData.map((category: Category) => {
+        const bookmarksInCategory = bookmarksData.filter(
+          (bookmark: Bookmark) => bookmark.categoryId === category.id
+        );
+        console.log('bookmarks in category', bookmarksInCategory);
+        return {
+          ...category,
+          bookmarks: bookmarksInCategory,
+        };
+      });
+
+      setCategorizedBookmarks(categorizedBookmarks);
+      console.log('categorized Bookmarks', categorizedBookmarks);
+      // console.log('bookmark data', bookmarksData);
+      // console.log('category data', categoriesData);
+    } catch (error) {
+      console.log('Error fetch bookmarks', error);
+    }
   };
 
   useEffect(() => {
@@ -43,11 +47,12 @@ const AllBookmarks = () => {
   return (
     <div>
       {categorizedBookmarks ? (
-        <div className='flex gap-3'>
+        <div className='flex gap-3 flex-wrap'>
           {categorizedBookmarks.map(
-            (categorizedBookmark: CategorizedBookmark, idx: number) => (
-              <BookmarksOfCategory key={idx} {...categorizedBookmark} />
-            )
+            (categorizedBookmark: CategorizedBookmark, idx: number) =>
+              categorizedBookmark.bookmarks.length ? (
+                <BookmarksOfCategory key={idx} {...categorizedBookmark} />
+              ) : null
           )}
         </div>
       ) : (
