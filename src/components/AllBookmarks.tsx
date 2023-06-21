@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Category from '../types/category';
 import Bookmark from '../types/Bookmark';
+import BookmarksOfCategory from './BookmarksOfCategory';
+import CategorizedBookmark from '../types/CategorizedBookmark';
 
 const AllBookmarks = () => {
-  const [bookmarks, setBookmarks] = useState(null);
+  const [categorizedBookmarks, setCategorizedBookmarks] = useState<
+    CategorizedBookmark[] | null
+  >(null);
 
   const fetchBookmarks = async () => {
     const response = await axios.get('http://localhost:3001/bookmarks');
@@ -26,8 +30,8 @@ const AllBookmarks = () => {
       };
     });
 
-    setBookmarks(categorizedBookmarks);
-    // console.log('categorized Bookmarks', categorizedBookmarks);
+    setCategorizedBookmarks(categorizedBookmarks);
+    console.log('categorized Bookmarks', categorizedBookmarks);
     // console.log('bookmark data', bookmarksData);
     // console.log('category data', categoriesData);
   };
@@ -36,7 +40,21 @@ const AllBookmarks = () => {
     fetchBookmarks();
   }, []);
 
-  return <div>AllBookmarks</div>;
+  return (
+    <div>
+      {categorizedBookmarks ? (
+        <div className='flex gap-3'>
+          {categorizedBookmarks.map(
+            (categorizedBookmark: CategorizedBookmark, idx: number) => (
+              <BookmarksOfCategory key={idx} {...categorizedBookmark} />
+            )
+          )}
+        </div>
+      ) : (
+        'Loading...'
+      )}
+    </div>
+  );
 };
 
 export default AllBookmarks;

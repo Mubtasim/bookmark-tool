@@ -4,7 +4,7 @@ import BookmarkDetails from '../components/BookmarkDetails';
 
 const Home = () => {
   return (
-    <div className='grid grid-cols-12 gap-4'>
+    <div className='grid grid-cols-12 gap-4 p-5'>
       <div className='col-span-8'>
         <AllBookmarks />
       </div>
