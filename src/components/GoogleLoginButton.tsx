@@ -73,9 +73,14 @@ const GoogleLoginButton = () => {
   return (
     <button
       onClick={handleGoogleLogout}
-      className='bg-yellow-500 rounded-sm text-white p-2'
+      className='bg-yellow-500 rounded-sm text-white p-2 flex items-center gap-3'
     >
       Logout
+      <img
+        src={currentUser.photoURL}
+        alt='Your Image'
+        className='rounded-full w-8 h-8'
+      />
     </button>
   );
 };
